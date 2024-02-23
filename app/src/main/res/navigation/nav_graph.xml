@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/charactersFragment">
+
+    <fragment
+        android:id="@+id/charactersFragment"
+        android:name="com.example.pruebatecnicaedgarpina.ui.characters.CharactersFragment"
+        android:label="Elige tu personaje"
+        tools:layout="@layout/characters_fragment">
+        <action
+            android:id="@+id/action_charactersFragment_to_characterDetailFragment"
+            app:destination="@id/characterDetailFragment" />
+        <action
+            android:id="@+id/action_charactersFragment_to_errorScreenFragment"
+            app:destination="@id/errorScreenFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/characterDetailFragment"
+        android:name="com.example.pruebatecnicaedgarpina.ui.detail.CharacterDetailFragment"
+        android:label="Detalle de personaje"
+        tools:layout="@layout/character_detail_fragment" />
+    <fragment
+        android:id="@+id/errorScreenFragment"
+        android:name="com.example.pruebatecnicaedgarpina.ui.error.ErrorScreenFragment"
+        android:label="Ocurrió un error"
+        tools:layout="@layout/error_screen_handle" >
+    </fragment>
+</navigation>
