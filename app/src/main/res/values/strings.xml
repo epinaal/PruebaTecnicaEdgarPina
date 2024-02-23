@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Rick &amp; Morty</string>
+    <string name="empty_results">No hay resultados para esta búsqueda, intenta con otro</string>
 </resources>

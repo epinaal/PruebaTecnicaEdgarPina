@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.compose.ui.graphics.Color
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,7 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pruebatecnicaedgarpina.R
 import com.example.pruebatecnicaedgarpina.databinding.CharactersFragmentBinding
 import com.example.pruebatecnicaedgarpina.utils.Resource
+import com.example.pruebatecnicaedgarpina.utils.withColor
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -47,7 +51,15 @@ class CharactersFragment : Fragment(), CharactersAdapter.CharacterItemListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 adapter.filter.filter(newText)
-                adapter.notifyDataSetChanged()
+                if (adapter.itemCount < 1) {
+                    Timber.d("no results found:")
+                    Snackbar
+                        .make(binding.flCharacters, resources.getString(R.string.empty_results), Snackbar.LENGTH_LONG)
+                        .withColor(resources.getColor(R.color.purple_700))
+                        .show()
+                } else {
+                    adapter.notifyDataSetChanged()
+                }
                 return true
             }
 
@@ -90,10 +102,5 @@ class CharactersFragment : Fragment(), CharactersAdapter.CharacterItemListener {
             R.id.action_charactersFragment_to_characterDetailFragment,
             bundleOf("id" to id)
         )
-    }
-
-    override fun onEmptyResults() {
-        //Show snackbar
-        Toast.makeText(requireContext(), "No hay resultados para esta búsqueda, intenta con otro", Toast.LENGTH_SHORT).show()
     }
 }

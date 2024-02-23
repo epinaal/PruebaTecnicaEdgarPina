@@ -20,7 +20,6 @@ class CharactersAdapter(private val listener: CharacterItemListener) :
 
     interface CharacterItemListener {
         fun onItemClicked(id: Int)
-        fun onEmptyResults()
     }
 
     private val items = ArrayList<RickAndMortyCharacter>()
@@ -28,10 +27,10 @@ class CharactersAdapter(private val listener: CharacterItemListener) :
     private var mFilteredList: ArrayList<RickAndMortyCharacter>? = null
 
     fun setItems(items: ArrayList<RickAndMortyCharacter>) {
-        this.items.clear()
         if (listRef == null) {
             listRef = items
         }
+        this.items.clear()
         this.items.addAll(items)
         notifyDataSetChanged()
     }
@@ -61,9 +60,6 @@ class CharactersAdapter(private val listener: CharacterItemListener) :
                             if (dataItem is RickAndMortyCharacter) {
                                 if (charString.toLowerCase(Locale.getDefault()) in dataItem.name.toLowerCase(Locale.getDefault())) {
                                     filteredList.add(dataItem)
-                                } else {
-                                    listener.onEmptyResults()
-                                    Timber.d("not found results:")
                                 }
                             }
                         }
