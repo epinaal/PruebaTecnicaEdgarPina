@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +15,7 @@ import com.example.pruebatecnicaedgarpina.R
 import com.example.pruebatecnicaedgarpina.databinding.CharactersFragmentBinding
 import com.example.pruebatecnicaedgarpina.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class CharactersFragment : Fragment(), CharactersAdapter.CharacterItemListener {
@@ -31,8 +34,27 @@ class CharactersFragment : Fragment(), CharactersAdapter.CharacterItemListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.searchCharacters.queryHint = "Buscar personajes: (ej. Nombre)"
+        binding.searchCharacters.isIconified = false
+        filterResults()
         setupRecyclerView()
         setupObservers()
+    }
+
+    private fun filterResults() {
+        binding.searchCharacters.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filter.filter(newText)
+                adapter.notifyDataSetChanged()
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+        })
     }
 
     private fun setupRecyclerView() {
@@ -68,5 +90,10 @@ class CharactersFragment : Fragment(), CharactersAdapter.CharacterItemListener {
             R.id.action_charactersFragment_to_characterDetailFragment,
             bundleOf("id" to id)
         )
+    }
+
+    override fun onEmptyResults() {
+        //Show snackbar
+        Toast.makeText(requireContext(), "No hay resultados para esta búsqueda, intenta con otro", Toast.LENGTH_SHORT).show()
     }
 }

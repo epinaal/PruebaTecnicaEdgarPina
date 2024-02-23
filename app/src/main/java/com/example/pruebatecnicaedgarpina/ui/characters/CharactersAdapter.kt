@@ -4,23 +4,34 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.pruebatecnicaedgarpina.data.entities.RickAndMortyCharacter
 import com.example.pruebatecnicaedgarpina.databinding.UpdatedItemBinding
+import timber.log.Timber
+import java.util.Locale
 
 class CharactersAdapter(private val listener: CharacterItemListener) :
-    RecyclerView.Adapter<CharacterViewHolder>() {
+    RecyclerView.Adapter<CharacterViewHolder>(), Filterable {
 
     interface CharacterItemListener {
         fun onItemClicked(id: Int)
+        fun onEmptyResults()
     }
 
     private val items = ArrayList<RickAndMortyCharacter>()
+    private var listRef: ArrayList<RickAndMortyCharacter>? = null
+    private var mFilteredList: ArrayList<RickAndMortyCharacter>? = null
 
     fun setItems(items: ArrayList<RickAndMortyCharacter>) {
         this.items.clear()
+        if (listRef == null) {
+            listRef = items
+        }
         this.items.addAll(items)
         notifyDataSetChanged()
     }
@@ -35,6 +46,41 @@ class CharactersAdapter(private val listener: CharacterItemListener) :
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) =
         holder.bind(items[position])
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(charSequence: CharSequence?): FilterResults {
+                val charString = charSequence.toString()
+
+                if (charString.isEmpty()) {
+                    mFilteredList = listRef
+                } else {
+                    listRef?.let {
+                        val filteredList = arrayListOf<RickAndMortyCharacter>()
+                        for (dataItem in listRef!!) {
+                            if (dataItem is RickAndMortyCharacter) {
+                                if (charString.toLowerCase(Locale.getDefault()) in dataItem.name.toLowerCase(Locale.getDefault())) {
+                                    filteredList.add(dataItem)
+                                } else {
+                                    listener.onEmptyResults()
+                                    Timber.d("not found results:")
+                                }
+                            }
+                        }
+                        mFilteredList = filteredList
+                    }
+                }
+                val filterResults = FilterResults()
+                filterResults.values = mFilteredList
+                return filterResults
+            }
+
+            override fun publishResults(p0: CharSequence?, filterResults: FilterResults?) {
+                mFilteredList = filterResults?.values as ArrayList<RickAndMortyCharacter>?
+                mFilteredList?.let { setItems(it) }
+            }
+        }
+    }
 }
 
 class CharacterViewHolder(
