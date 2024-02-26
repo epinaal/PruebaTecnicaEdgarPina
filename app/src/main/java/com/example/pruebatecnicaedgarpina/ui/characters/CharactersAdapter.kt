@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.pruebatecnicaedgarpina.data.entities.RickAndMortyCharacter
-import com.example.pruebatecnicaedgarpina.databinding.UpdatedItemBinding
-import timber.log.Timber
+import com.example.pruebatecnicaedgarpina.databinding.ItemCharacterBinding
 import java.util.Locale
 
 class CharactersAdapter(private val listener: CharacterItemListener) :
@@ -36,8 +34,8 @@ class CharactersAdapter(private val listener: CharacterItemListener) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val binding: UpdatedItemBinding =
-            UpdatedItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding: ItemCharacterBinding =
+            ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharacterViewHolder(binding, listener)
     }
 
@@ -80,7 +78,7 @@ class CharactersAdapter(private val listener: CharacterItemListener) :
 }
 
 class CharacterViewHolder(
-    private val itemBinding: UpdatedItemBinding,
+    private val itemBinding: ItemCharacterBinding,
     private val listener: CharactersAdapter.CharacterItemListener
 ) : RecyclerView.ViewHolder(itemBinding.root),
     View.OnClickListener {
