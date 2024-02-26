@@ -12,6 +12,7 @@ import com.example.pruebatecnicaedgarpina.data.entities.RickAndMortyCharacter
 import com.example.pruebatecnicaedgarpina.databinding.CharacterDetailFragmentBinding
 import com.example.pruebatecnicaedgarpina.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class CharacterDetailFragment : Fragment() {

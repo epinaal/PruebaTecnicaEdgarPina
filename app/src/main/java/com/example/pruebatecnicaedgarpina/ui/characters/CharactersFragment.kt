@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.SearchView
-import android.widget.Toast
-import androidx.compose.ui.graphics.Color
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,14 +31,14 @@ class CharactersFragment : Fragment(), CharactersAdapter.CharacterItemListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         binding = CharactersFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.searchCharacters.queryHint = "Buscar personajes: (ej. Nombre)"
-        binding.searchCharacters.isIconified = false
+        binding.searchCharacters.queryHint = resources.getString(R.string.query_hint)
         filterResults()
         setupRecyclerView()
         setupObservers()
@@ -77,11 +76,12 @@ class CharactersFragment : Fragment(), CharactersAdapter.CharacterItemListener {
     }
 
     private fun setupObservers() {
+        binding.progressBar.visibility = View.VISIBLE
         viewModel.characters.observe(viewLifecycleOwner) {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
-                    binding.progressBar.visibility = View.GONE
                     if (!it.data.isNullOrEmpty()) adapter.setItems(ArrayList(it.data))
+                    binding.progressBar.visibility = View.GONE
                 }
 
                 Resource.Status.ERROR -> {

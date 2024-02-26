@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">Rick &amp; Morty</string>
+    <string name="app_name">Rick &amp; Chelo</string>
     <string name="empty_results">No hay resultados para esta búsqueda, intenta con otro</string>
+    <string name="query_hint">Buscar personajes: (ej. Nombre)</string>
 </resources>
